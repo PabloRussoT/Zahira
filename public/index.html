@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LISTA MEDICOS </title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn-action {
+            margin-right: 5px;
+        }
+        .modal .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center text-primary">LISTA MEDICOS</h1>
+        <div class="row mt-4">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-success mb-3" data-toggle="modal" data-target="#medicModal">Add Medic</button>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Speciality</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Image</th>
+                            <th>Services</th>
+                            <th>Certifications</th>
+                            <th>State</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medics-table-body">
+                        <!-- Los datos se insertarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for CRUD operations -->
+    <div class="modal fade" id="medicModal" tabindex="-1" role="dialog" aria-labelledby="medicModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="medicModalLabel">Add/Edit Medic</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="medic-form">
+                        <div class="form-group">
+                            <label for="medicName">Name</label>
+                            <input type="text" class="form-control" id="medicName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="medicSpeciality">Speciality</label>
+                            <input type="text" class="form-control" id="medicSpeciality" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="medicPhone">Phone</label>
+                            <input type="text" class="form-control" id="medicPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="medicEmail">Email</label>
+                            <input type="email" class="form-control" id="medicEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="medicImage">Image URL</label>
+                            <input type="text" class="form-control" id="medicImage">
+                        </div>
+                        <div class="form-group">
+                            <label for="medicServices">Services</label>
+                            <input type="text" class="form-control" id="medicServices">
+                        </div>
+                        <div class="form-group">
+                            <label for="medicCertifications">Certifications</label>
+                            <input type="text" class="form-control" id="medicCertifications">
+                        </div>
+                        <div class="form-group">
+                            <label for="medicState">State</label>
+                            <input type="text" class="form-control" id="medicState" value="activo">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Fetch and display medics
+            $.ajax({
+                url: '/medics',
+                method: 'GET',
+                success: function(data) {
+                    const tbody = $('#medics-table-body');
+                    data.forEach(medic => {
+                        const row = `<tr>
+                            <td>${medic.id}</td>
+                            <td>${medic.name}</td>
+                            <td>${medic.speciality}</td>
+                            <td>${medic.phone}</td>
+                            <td>${medic.email}</td>
+                            <td>${medic.image}</td>
+                            <td>${medic.services}</td>
+                            <td>${medic.certifications}</td>
+                            <td>${medic.state}</td>
+                            <td>
+                                <button class="btn btn-info btn-action" data-toggle="modal" data-target="#medicModal">Edit</button>
+                                <button class="btn btn-danger btn-action">Delete</button>
+                            </td>
+                        </tr>`;
+                        tbody.append(row);
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching medics:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
